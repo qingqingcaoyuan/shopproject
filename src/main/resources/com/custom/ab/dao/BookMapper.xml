@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.custom.ab.dao.BookDao">
+  <resultMap id="BaseResultMap" type="com.custom.ab.model.Book">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="PRICE" jdbcType="FLOAT" property="price" />
+    <result column="CATEGORY" jdbcType="VARCHAR" property="category" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, NAME, PRICE, CATEGORY
+  </sql>
+  <select id="searchByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from book
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.custom.ab.model.Book">
+    delete from book
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="addBook" parameterType="com.custom.ab.model.Book">
+    insert into book (NAME, 
+      PRICE, CATEGORY)
+    values ( #{name,jdbcType=VARCHAR}, #{price,jdbcType=FLOAT}, 
+      #{category,jdbcType=VARCHAR})
+  </insert>
+  <insert id="addSelective" parameterType="com.custom.ab.model.Book">
+    insert into book
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="price != null">
+        PRICE,
+      </if>
+      <if test="category != null">
+        CATEGORY,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=FLOAT},
+      </if>
+      <if test="category != null">
+        #{category,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+</mapper>
